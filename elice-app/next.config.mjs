@@ -7,6 +7,15 @@ const nextConfig = {
       pure: true, // dead code elimination (사용되지 않는 속성 제거)
     },
   },
-};
+  reactStrictMode: false, // api 두번 호출 방지
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn-api.elice.io',
+      },
+    ],
+  },
+}
 
 export default nextConfig
