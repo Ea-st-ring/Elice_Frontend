@@ -22,6 +22,10 @@
     },
   },
   "typeRoots": ["./src/types", "./node_modules/@types"],
-  "include": [".next/types/**/*.ts", "src/**/*", "global.d.ts"],
+  "include": [
+    ".next/types/**/*.ts",
+    "src/**/*",
+    "global.d.ts",
+  ],
   "exclude": ["node_modules"],
 }
