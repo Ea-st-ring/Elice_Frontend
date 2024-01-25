@@ -3,16 +3,21 @@ import React from 'react'
 import styled from 'styled-components'
 import OrgCourseListResponses from '@/type/typings'
 
-const CourseCard = () => {
+const CourseCard = (course: OrgCourseListResponses['courses'][0]) => {
   return (
     <Wrapper>
       <Content>
-        <Label>프로그래밍 기초</Label>
-        <Title>Docker</Title>
-        <Description>
-          Docker란 무엇인지 알아보고, 직접 사용해보며 Devops에 한 발짝 더
-          다가가보세요. 재미있지 않을 수 없습니다.
-        </Description>
+        <Label>
+          {course.enrollType === 0
+            ? course.isFree
+              ? '무료'
+              : '유료'
+            : course.enrollType === 4
+              ? '구독'
+              : '미설정'}
+        </Label>
+        <Title>{course.title}</Title>
+        <Description>{course.shortDescription}</Description>
         <IconDiv>
           <IconText>
             <div>
@@ -39,7 +44,12 @@ const CourseCard = () => {
             </div>
           </IconText>
           <Logo>
-            <Image src="images/logo.svg" alt="nextjs" width={52} height={52} />
+            <Image
+              src={course.logoFileUrl as string}
+              alt="logo__img"
+              width={52}
+              height={52}
+            />
           </Logo>
         </IconDiv>
       </Content>
@@ -98,16 +108,18 @@ const Description = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   margin-top: 16px;
+  min-height: 45px;
 `
 
 const IconDiv = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   margin-top: 28px;
 `
 
 const IconText = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -115,6 +127,7 @@ const IconText = styled.div`
   color: #7d7e80;
   div {
     display: flex;
+    justify-content: flex-start;
     align-items: center;
     width: 105px;
     img {
@@ -127,13 +140,17 @@ const IconText = styled.div`
   justify-content: space-between;
   font-size: 12px;
   color: #5e5f61;
-  margin-top: 16px;
 `
 
 const Logo = styled.div`
-  width: 52px;
-  height: 52px;
-  margin-top: 16px;
+  height: 105px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  img {
+    width: 52px;
+    height: 52px;
+  }
 `
 
 export default CourseCard
