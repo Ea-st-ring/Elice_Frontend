@@ -45,7 +45,7 @@ export default function Pagination({
 
   return (
     <Wrapper>
-      <Arrow isactive={start === 1 ? 'false' : 'true'}>
+      <Arrow $isactive={start === 1 ? 'false' : 'true'}>
         <span
           onClick={() => {
             handlePageChange(start - 1)
@@ -64,18 +64,18 @@ export default function Pagination({
             <Box
               key={page}
               onClick={() => handlePageChange(page)}
-              isactive="false"
+              $isactive="false"
             >
               {page}
             </Box>
           ),
         )}
-        <Box isactive="true">{start}</Box>
+        <Box $isactive="true">{start}</Box>
         {Array.from({ length: next }, (_, i) => i + start + 1).map((page) => (
           <Box
             key={page}
             onClick={() => handlePageChange(page)}
-            isactive="false"
+            $isactive="false"
           >
             {page}
           </Box>
@@ -85,7 +85,7 @@ export default function Pagination({
             <EmptyBox key={index}></EmptyBox>
           ))}
       {/* </NavBox> */}
-      <Arrow isactive={start === totalPages ? 'false' : 'true'}>
+      <Arrow $isactive={start === totalPages ? 'false' : 'true'}>
         <span
           onClick={() => {
             handlePageChange(start + 1)
@@ -122,14 +122,14 @@ const Wrapper = styled.div`
   }
 `
 
-const Arrow = styled.div<{ isactive: string }>`
+const Arrow = styled.div<{ $isactive: string }>`
   width: 24px;
   height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => (props.isactive === 'true' ? '#222' : '#ccc')};
-  cursor: ${(props) => (props.isactive === 'true' ? 'pointer' : 'default')};
+  color: ${(props) => (props.$isactive === 'true' ? '#222' : '#ccc')};
+  cursor: ${(props) => (props.$isactive === 'true' ? 'pointer' : 'default')};
 `
 
 const EmptyBox = styled.div`
@@ -147,15 +147,15 @@ const NavBox = styled.div`
   width: 270px;
 `
 
-const Box = styled.div<{ isactive: string }>`
+const Box = styled.div<{ $isactive: string }>`
   width: 24px;
   height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: ${(props) =>
-    props.isactive === 'true' ? '#524FA1' : 'transparent'};
-  color: ${(props) => (props.isactive === 'true' ? '#fff' : '#999')};
+    props.$isactive === 'true' ? '#524FA1' : 'transparent'};
+  color: ${(props) => (props.$isactive === 'true' ? '#fff' : '#999')};
   cursor: pointer;
   & + & {
     margin-left: 6px;
