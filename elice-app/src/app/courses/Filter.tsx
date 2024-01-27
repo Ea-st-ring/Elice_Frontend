@@ -1,38 +1,78 @@
+import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import styled from 'styled-components'
 
-const Filter = () => {
+interface Props {
+  handlePageChange: (page: number) => void
+}
+
+const Filter = ({ handlePageChange } : Props) => {
+  const filters = {
+    name: '가격',
+    content: [
+      {
+        id: 1,
+        name: '무료',
+        value: 'free',
+        enrollType: 0,
+      },
+      {
+        id: 2,
+        name: '유료',
+        value: 'paid',
+        enrollType: 0,
+      },
+      {
+        id: 3,
+        name: '구독',
+        value: 'subscribe',
+        enrollType: 4,
+      },
+    ],
+  }
+  const router = useRouter()
+  const params = useSearchParams()
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const existingParams = new URLSearchParams(params.toString())
+    const clickedPrice = filters.content.find(
+      (filter) => filter.name === e.currentTarget.textContent,
+    )?.name
+    if (existingParams.getAll('price').includes(clickedPrice as string)) {
+      const updatedPrices = existingParams
+        .getAll('price')
+        .filter((price) => price !== clickedPrice)
+      existingParams.delete('price')
+
+      updatedPrices.forEach((price) => existingParams.append('price', price))
+    } else {
+      existingParams.append('price', clickedPrice as string)
+    }
+    handlePageChange(1)
+    router.push(`?${existingParams.toString()}`)
+  }
+
   return (
     <Wrapper>
       <FilterDiv>
-        <FilterName>유형</FilterName>
-        <FilterContent>
-        <div>
-          <button>
-            <span>과목</span>
-          </button>
-        </div>
-        <div>
-          <button>
-            <span>챌린지</span>
-          </button>
-        </div>
-        </FilterContent>
-      </FilterDiv>
-      <FilterDiv>
-        <FilterName>진행 방식</FilterName>
-      </FilterDiv>
-      <FilterDiv>
-        <FilterName>분야</FilterName>
-      </FilterDiv>
-      <FilterDiv>
-        <FilterName>난이도</FilterName>
-      </FilterDiv>
-      <FilterDiv>
-        <FilterName>언어</FilterName>
-      </FilterDiv>
-      <FilterDiv>
         <FilterName>가격</FilterName>
+        <FilterContent>
+          {filters.content.map((filter) => (
+            <div key={filter.id} onClick={handleClick}>
+              <button
+                style={
+                  params.getAll('price').includes(filter.name)
+                    ? {
+                        backgroundColor: '#524FA1',
+                        color: '#F0F1F3',
+                      }
+                    : {}
+                }
+              >
+                <span>{filter.name}</span>
+              </button>
+            </div>
+          ))}
+        </FilterContent>
       </FilterDiv>
     </Wrapper>
   )
