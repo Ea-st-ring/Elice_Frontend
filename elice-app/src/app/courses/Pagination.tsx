@@ -38,7 +38,7 @@ export default function Pagination({
       setPrev(4)
       setNext(totalPages - current >= 4 ? 4 : totalPages - current)
     }
-  }, [current, offset])
+  }, [current, handlePageChange])
 
   if (totalPages === 0) {
     return <></>
