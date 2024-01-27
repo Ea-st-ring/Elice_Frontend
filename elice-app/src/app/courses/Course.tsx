@@ -29,7 +29,7 @@ const Course: React.FC<Props & OrgCourseListResponses> = ({
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
     ref.current?.scrollIntoView()
-  }, [offset])
+  }, [current])
 
   if (loading) {
     return <Loading />
