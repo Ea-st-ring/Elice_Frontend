@@ -1,16 +1,19 @@
-import axios from 'axios'
 import Image from 'next/image'
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import CourseCard from './CourseCard'
 import Pagination from './Pagination'
 import OrgCourseListResponses from '@/type/typings'
+import Loading from './Loading'
+import NoResult from './NoResult'
 
 interface Props {
   countPerPage: number
   offset: number
   handlePageChange: (page: number) => void
   loading: boolean
+  current: number
+  setCurrent: (page: number) => void
 }
 
 const Course: React.FC<Props & OrgCourseListResponses> = ({
@@ -20,6 +23,8 @@ const Course: React.FC<Props & OrgCourseListResponses> = ({
   courseCount,
   courses,
   loading,
+  current,
+  setCurrent,
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -27,34 +32,32 @@ const Course: React.FC<Props & OrgCourseListResponses> = ({
   }, [offset])
 
   if (loading) {
-    return (
-      <div style={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-        <Image src="/loading.gif" alt="loading" width={500} height={500} />
-      </div>
-    )
+    return <Loading />
   }
 
-  
   return (
-    <Wrapper ref= {ref}>
-      <CountDiv>전체 {courseCount}개</CountDiv>
-      <Divider />
-      <CourseDiv>
-        {courses.map((course) => (
-          <CourseCard key={course.id} {...course} />
-        ))}
-      </CourseDiv>
-      <Pagination
-        countPerPage={countPerPage}
-        offset={offset}
-        handlePageChange={handlePageChange}
-        courseCount={courseCount}
-      />
+    <Wrapper ref={ref}>
+      {courseCount === 0 ? (
+        <NoResult />
+      ) : (
+        <>
+          <CountDiv>전체 {courseCount}개</CountDiv>
+          <Divider />
+          <CourseDiv>
+            {courses.map((course) => (
+              <CourseCard key={course.id} {...course} />
+            ))}
+          </CourseDiv>
+          <Pagination
+            countPerPage={countPerPage}
+            offset={offset}
+            handlePageChange={handlePageChange}
+            courseCount={courseCount}
+            current={current}
+            setCurrent={setCurrent}
+          />
+        </>
+      )}
     </Wrapper>
   )
 }
@@ -88,4 +91,4 @@ const CourseDiv = styled.div`
   margin-top: 16px;
 `
 
-export default Course
+export default React.memo(Course)
