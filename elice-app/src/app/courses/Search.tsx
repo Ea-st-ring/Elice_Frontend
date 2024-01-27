@@ -49,7 +49,8 @@ const Wrapper = styled.div`
   &:focus-within {
     border-color: rgb(82, 79, 161);
   }
-  margin-bottom: 16px;
+  padding: 12px 0;
+  margin: 12px 0;
 `
 
 const IconDiv = styled.div`
