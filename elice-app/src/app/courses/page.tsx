@@ -5,6 +5,7 @@ import Search from './Search'
 import Filter from './Filter'
 import Course from './Course'
 import axios from 'axios'
+import { useSearchParams } from 'next/navigation'
 
 const Page = () => {
   const [courses, setCourses] = useState([])
@@ -12,33 +13,59 @@ const Page = () => {
   const [courseCount, setCourseCount] = useState(0)
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [current, setCurrent] = useState(1)
   const countPerPage = 20
-  const fetchData = async () => {
-    await axios.get('/api/course/list').then((res) => {
-      // 쿼리에 따라 처리 필요
-      setCourseCount(res.data.courseCount)
-      setCourses(res.data.courses)
-      console.log(res.data.courses)
-      setCurrentCourses(res.data.courses.slice(offset, offset + countPerPage))
-      setLoading(false)
-    })
-  }
-  useEffect(() => {
-    fetchData()
-  }, [offset])
+  const params = useSearchParams()
+  const keyword = params.get('keyword')
+  const price = params.getAll('price')
   const handlePageChange = (page: number) => {
+    setCurrentCourses(courses.slice((page - 1) * countPerPage, page * countPerPage))
     if (page < 1 || page > Math.ceil(courseCount / countPerPage)) {
       return
     }
-
     setOffset((page - 1) * countPerPage)
   }
+
+
+  const filter_conditions = JSON.stringify({
+    $and: [
+      { title: keyword ? { $regex: `${keyword}` } : '' },
+      {
+        $or: [
+          price.includes('무료') ? { enroll_type: 0, is_free: true } : null,
+          price.includes('유료') ? { enroll_type: 0, is_free: false } : null,
+          price.includes('구독') ? { enroll_type: 4 } : null,
+        ].filter((condition) => condition !== null),
+      },
+    ],
+  })
+
+  const fetchData = async () => {
+    await axios
+      .get('/api/course/list', {
+        params: {
+          filter_conditions,
+          offset: offset,
+          countPerPage: countPerPage,
+        },
+      })
+      .then((res) => {
+        setCourseCount(res.data.courseCount)
+        setCourses(res.data.courses)
+        setCurrentCourses(res.data.courses.slice(offset, offset + countPerPage))
+        setLoading(false)
+      })
+  }
+  useEffect(() => {
+    setLoading(true)
+    fetchData()
+  }, [params])
 
   return (
     <Container>
       <SearchHeader>
-        <Search />
-        <Filter />
+        <Search handlePageChange={handlePageChange} />
+        <Filter handlePageChange={handlePageChange} />
       </SearchHeader>
       <Course
         courseCount={courseCount}
@@ -47,6 +74,8 @@ const Page = () => {
         offset={offset}
         handlePageChange={handlePageChange}
         loading={loading}
+        current={current}
+        setCurrent={setCurrent}
       ></Course>
     </Container>
   )
