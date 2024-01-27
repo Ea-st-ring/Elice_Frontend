@@ -9,7 +9,6 @@ import { useSearchParams } from 'next/navigation'
 
 const Page = () => {
   const [courses, setCourses] = useState([])
-  const [currentCourses, setCurrentCourses] = useState([])
   const [courseCount, setCourseCount] = useState(0)
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -19,11 +18,13 @@ const Page = () => {
   const keyword = params.get('keyword')
   const price = params.getAll('price')
   const handlePageChange = (page: number) => {
-    setCurrentCourses(courses.slice((page - 1) * countPerPage, page * countPerPage))
+    setOffset((page - 1) * countPerPage)
+    setLoading(true)
+    
     if (page < 1 || page > Math.ceil(courseCount / countPerPage)) {
       return
     }
-    setOffset((page - 1) * countPerPage)
+    
   }
 
 
@@ -52,14 +53,13 @@ const Page = () => {
       .then((res) => {
         setCourseCount(res.data.courseCount)
         setCourses(res.data.courses)
-        setCurrentCourses(res.data.courses.slice(offset, offset + countPerPage))
         setLoading(false)
       })
   }
   useEffect(() => {
     setLoading(true)
     fetchData()
-  }, [params])
+  }, [params, offset])
 
   return (
     <Container>
@@ -69,7 +69,7 @@ const Page = () => {
       </SearchHeader>
       <Course
         courseCount={courseCount}
-        courses={currentCourses}
+        courses={courses}
         countPerPage={countPerPage}
         offset={offset}
         handlePageChange={handlePageChange}
