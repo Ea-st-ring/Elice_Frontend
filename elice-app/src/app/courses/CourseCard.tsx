@@ -45,7 +45,7 @@ const CourseCard = (course: OrgCourseListResponses['courses'][0]) => {
           </IconText>
           <Logo>
             <Image
-              src={course.logoFileUrl as string}
+              src={(course.logoFileUrl as string) || '/images/logo.svg'}
               alt="logo__img"
               width={52}
               height={52}
