@@ -21,7 +21,7 @@ export default async function List(request: any, response: any) {
     let courseCount = 0
     const result = await axios
       .get(
-        `https://api-rest.elice.io/org/academy/course/list/?offset=${offset}&count=${countPerPage}&filter_conditions=${JSON.stringify(query)}`,
+        `${process.env.API_URL}/academy/course/list/?offset=${offset}&count=${countPerPage}&filter_conditions=${JSON.stringify(query)}`,
       )
       .then((res) => {
         let arr = [] as OrgCourseListResponses['courses']
