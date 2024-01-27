@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect} from 'react'
 import styled from 'styled-components'
-import Image from 'next/image'
 
 interface Props {
   countPerPage: number
   offset: number
   courseCount: number
   handlePageChange: (page: number) => void
+  current: number,
+  setCurrent: (page: number) => void
 }
 
 export default function Pagination({
@@ -15,51 +15,52 @@ export default function Pagination({
   countPerPage,
   courseCount,
   handlePageChange,
+  current,
+  setCurrent,
 }: Props) {
-  const totalPages = Math.ceil(courseCount / countPerPage) // 전체 페이지 수
-  // page는 1부터 시작, pageCount는 앞 뒤 최대 4개씩
-  const [start, setStart] = useState(1)
+  const totalPages = Math.ceil(courseCount / countPerPage)
   const [prev, setPrev] = useState(0)
   const [next, setNext] = useState(0)
+  // 빈 Box를 만들기 위한 prev, next 상태
   const [pageCount, setPageCount] = useState(9)
 
   useEffect(() => {
-    setStart(Math.floor(offset / countPerPage) + 1)
+    setCurrent(Math.floor(offset / countPerPage) + 1)
     if (totalPages <= 5) {
       setPageCount(totalPages)
-      setPrev(start - 1)
-      setNext(totalPages - start)
-    } else if (start < 5) {
-      setPageCount(start + 4)
-      setPrev(start - 1)
-      setNext(totalPages - start >= 4 ? 4 : totalPages - start)
+      setPrev(current - 1)
+      setNext(totalPages - current)
+    } else if (current < 5) {
+      setPageCount(current + 4)
+      setPrev(current - 1)
+      setNext(totalPages - current >= 4 ? 4 : totalPages - current)
     } else {
       setPrev(4)
-      setNext(totalPages - start >= 4 ? 4 : totalPages - start)
+      setNext(totalPages - current >= 4 ? 4 : totalPages - current)
     }
-  }, [start, offset])
+  }, [current, offset])
 
   if (totalPages === 0) {
     return <></>
   }
+    
 
   return (
     <Wrapper>
-      <Arrow $isactive={start === 1 ? 'false' : 'true'}>
+      <Arrow $isactive={current === 1 ? 'false' : 'true'}>
         <span
           onClick={() => {
-            handlePageChange(start - 1)
+            handlePageChange(current - 1)
           }}
         >
           ◀
         </span>
       </Arrow>
-      {/* <NavBox> */}
         {prev < 4 &&
           Array.from({ length: 4 - prev }).map((_, index) => (
             <EmptyBox key={index}></EmptyBox>
           ))}
-        {Array.from({ length: prev }, (_, i) => i + start - prev).map(
+        {Array.from({ length: prev }, (_, i) => i + current - prev).map(
           (page) => (
             <Box
               key={page}
@@ -70,8 +71,8 @@ export default function Pagination({
             </Box>
           ),
         )}
-        <Box $isactive="true">{start}</Box>
-        {Array.from({ length: next }, (_, i) => i + start + 1).map((page) => (
+        <Box $isactive="true">{current}</Box>
+        {Array.from({ length: next }, (_, i) => i + current + 1).map((page) => (
           <Box
             key={page}
             onClick={() => handlePageChange(page)}
@@ -84,11 +85,10 @@ export default function Pagination({
           Array.from({ length: 4 - next }).map((_, index) => (
             <EmptyBox key={index}></EmptyBox>
           ))}
-      {/* </NavBox> */}
-      <Arrow $isactive={start === totalPages ? 'false' : 'true'}>
+      <Arrow $isactive={current === totalPages ? 'false' : 'true'}>
         <span
           onClick={() => {
-            handlePageChange(start + 1)
+            handlePageChange(current + 1)
           }}
         >
           ▶
