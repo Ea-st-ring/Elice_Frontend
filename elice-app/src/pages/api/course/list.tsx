@@ -1,42 +1,61 @@
-import { connectDB } from '@/util/db'
 import OrgCourseListResponses from '@/type/typings'
+import axios from 'axios'
 
 export default async function List(request: any, response: any) {
-  if (request.method == 'GET') {
-    const db = (await connectDB).db('elice')
+  try {
+    if (request.method !== 'GET') {
+      throw new Error('Invalid HTTP method. Expected GET.')
+    }
     const query = JSON.parse(request.query.filter_conditions)
-    if (query.$and[0].title == '') {
+
+    if (query.$and[0].title === '') {
       delete query.$and[0].title
     }
-    if (query.$and[1].$or.length == 0) {
+
+    if (query.$and[1].$or.length === 0) {
       delete query.$and[1].$or
     }
 
     const offset = parseInt(request.query.offset)
     const countPerPage = parseInt(request.query.countPerPage)
+    let courseCount = 0
+    const result = await axios
+      .get(
+        `https://api-rest.elice.io/org/academy/course/list/?offset=${offset}&count=${countPerPage}&filter_conditions=${JSON.stringify(query)}`,
+      )
+      .then((res) => {
+        let arr = [] as OrgCourseListResponses['courses']
+        for (let i of res.data.courses) {
+          arr.push(i)
+        }
+        courseCount = res.data.course_count
+        return arr
+      })
+      .catch((err) => {
+        console.log(err)
+      })
 
-    const result = await db
-      .collection('course')
-      .find(query)
-      .limit(countPerPage)
-      .skip(offset)
-      .toArray()
-    const courseCount = await db.collection('course').countDocuments(query)
-    var course = result.map((course) => {
-      return {
-        id: course._id.toString(),
-        title: course.title,
-        enrollType: course.enroll_type,
-        isFree: course.is_free,
-        shortDescription: course.short_description,
-        logoFileUrl: course.logo_file_url,
-      }
-    })
+    const course = result?.map(
+      (course) => {
+        return {
+          id: course.id.toString(),
+          title: course.title,
+          enrollType: course.enroll_type,
+          isFree: course.is_free,
+          shortDescription: course.short_description,
+          logoFileUrl: course.logo_file_url,
+        }
+      },
+    )
 
     const data = {
-      courseCount: courseCount as OrgCourseListResponses['courseCount'],
+      courseCount: courseCount,
       courses: course as OrgCourseListResponses['courses'],
     } as OrgCourseListResponses
+
     return response.status(200).json(data)
+  } catch (error) {
+    console.error('Error in List function:', error)
+    return response.status(500).json({ error: 'Internal Server Error' })
   }
 }
