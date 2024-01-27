@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
   html {
-    scroll-behavior: smooth;    
+    /* scroll-behavior: smooth;     */
   }
   * {
     box-sizing: border-box;
