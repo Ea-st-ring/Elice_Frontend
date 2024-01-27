@@ -1,8 +1,24 @@
 import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useDebouncedCallback } from 'use-debounce'
 import React from 'react'
 import styled from 'styled-components'
 
-const Search = () => {
+interface Props {
+  handlePageChange: (page: number) => void
+}
+
+const Search = ({handlePageChange} : Props) => {
+  const router = useRouter()
+  const params = useSearchParams()
+
+  const handleChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const existingParams = new URLSearchParams(params.toString());
+    existingParams.set('keyword', e.target.value);
+    router.push(`?${existingParams.toString()}`);
+    handlePageChange(1)
+  }, 300);
+
   return (
     <Wrapper>
       <IconDiv>
@@ -13,7 +29,10 @@ const Search = () => {
           height={16}
         />
       </IconDiv>
-      <Input placeholder="배우고 싶은 언어, 기술을 검색해 보세요" />
+      <Input
+        onChange={(e) => handleChange(e)}
+        placeholder="배우고 싶은 언어, 기술을 검색해 보세요"
+      />
     </Wrapper>
   )
 }
