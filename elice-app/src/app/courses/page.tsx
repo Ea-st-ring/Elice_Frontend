@@ -6,6 +6,8 @@ import Filter from './Filter'
 import Course from './Course'
 import axios from 'axios'
 import { useSearchParams } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Page = () => {
   const [courses, setCourses] = useState([])
@@ -20,13 +22,11 @@ const Page = () => {
   const handlePageChange = (page: number) => {
     setOffset((page - 1) * countPerPage)
     setLoading(true)
-    
+
     if (page < 1 || page > Math.ceil(courseCount / countPerPage)) {
       return
     }
-    
   }
-
 
   const filter_conditions = JSON.stringify({
     $and: [
@@ -55,11 +55,18 @@ const Page = () => {
         setCourses(res.data.courses)
         setLoading(false)
       })
+      .catch((err) => {
+        console.log(err)
+        const errorMessage = err.response.data['error'] || err.message
+        toast.error(errorMessage);
+        setLoading(false)
+      })
   }
   useEffect(() => {
     setLoading(true)
     fetchData()
   }, [params, offset])
+
 
   return (
     <Container>
@@ -77,6 +84,7 @@ const Page = () => {
         current={current}
         setCurrent={setCurrent}
       ></Course>
+      <ToastContainer position="bottom-right"/>
     </Container>
   )
 }
