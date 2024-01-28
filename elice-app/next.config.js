@@ -5,6 +5,7 @@ module.exports = {
   reactStrictMode: false, // api 두번 호출 방지
   experimental: {
     forceSwcTransforms: true,
+    missingSuspenseWithCSRBailout: false,
   },
   images: {
     remotePatterns: [
