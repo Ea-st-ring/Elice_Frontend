@@ -26,7 +26,7 @@ const Page = () => {
 
   const filter_conditions = JSON.stringify({
     $and: [
-      { title: keyword ? { $regex: `${keyword}` } : '' },
+      { title: keyword ? `%${keyword}%` : '' },
       {
         $or: [
           price.includes('무료') ? { enroll_type: 0, is_free: true } : null,
@@ -54,7 +54,7 @@ const Page = () => {
       .catch((err) => {
         console.log(err)
         const errorMessage = err.response.data['error'] || err.message
-        toast.error(errorMessage);
+        toast.error(errorMessage)
         setLoading(false)
       })
   }
@@ -62,7 +62,6 @@ const Page = () => {
     setLoading(true)
     fetchData()
   }, [params, offset])
-
 
   return (
     <Container>
@@ -80,7 +79,7 @@ const Page = () => {
         current={current}
         setCurrent={setCurrent}
       ></Course>
-      <ToastContainer position="bottom-right"/>
+      <ToastContainer position="bottom-right" />
     </Container>
   )
 }
