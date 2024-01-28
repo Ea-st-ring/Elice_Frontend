@@ -6,7 +6,7 @@ interface Props {
   handlePageChange: (page: number) => void
 }
 
-const Filter = ({ handlePageChange } : Props) => {
+const Filter = ({ handlePageChange }: Props) => {
   const filters = {
     name: '가격',
     content: [

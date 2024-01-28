@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const Loading = () => {
   return (
     <>
-    <CountDiv>Loading. . .</CountDiv>
+      <CountDiv>Loading. . .</CountDiv>
       <Divider />
       <CourseDiv>
         <Wrapper></Wrapper>

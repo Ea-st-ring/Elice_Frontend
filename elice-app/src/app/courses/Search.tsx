@@ -8,16 +8,19 @@ interface Props {
   handlePageChange: (page: number) => void
 }
 
-const Search = ({handlePageChange} : Props) => {
+const Search = ({ handlePageChange }: Props) => {
   const router = useRouter()
   const params = useSearchParams()
 
-  const handleChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const existingParams = new URLSearchParams(params.toString());
-    existingParams.set('keyword', e.target.value);
-    router.push(`?${existingParams.toString()}`);
-    handlePageChange(1)
-  }, 300);
+  const handleChange = useDebouncedCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const existingParams = new URLSearchParams(params.toString())
+      existingParams.set('keyword', e.target.value)
+      router.push(`?${existingParams.toString()}`)
+      handlePageChange(1)
+    },
+    300,
+  )
 
   return (
     <Wrapper>

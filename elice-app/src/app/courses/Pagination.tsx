@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 interface Props {
@@ -6,7 +6,7 @@ interface Props {
   offset: number
   courseCount: number
   handlePageChange: (page: number) => void
-  current: number,
+  current: number
   setCurrent: (page: number) => void
 }
 
@@ -43,7 +43,6 @@ export default function Pagination({
   if (totalPages === 0) {
     return <></>
   }
-    
 
   return (
     <Wrapper>
@@ -56,23 +55,12 @@ export default function Pagination({
           ◀
         </span>
       </Arrow>
-        {prev < 4 &&
-          Array.from({ length: 4 - prev }).map((_, index) => (
-            <EmptyBox key={index}></EmptyBox>
-          ))}
-        {Array.from({ length: prev }, (_, i) => i + current - prev).map(
-          (page) => (
-            <Box
-              key={page}
-              onClick={() => handlePageChange(page)}
-              $isactive="false"
-            >
-              {page}
-            </Box>
-          ),
-        )}
-        <Box $isactive="true">{current}</Box>
-        {Array.from({ length: next }, (_, i) => i + current + 1).map((page) => (
+      {prev < 4 &&
+        Array.from({ length: 4 - prev }).map((_, index) => (
+          <EmptyBox key={index}></EmptyBox>
+        ))}
+      {Array.from({ length: prev }, (_, i) => i + current - prev).map(
+        (page) => (
           <Box
             key={page}
             onClick={() => handlePageChange(page)}
@@ -80,11 +68,22 @@ export default function Pagination({
           >
             {page}
           </Box>
+        ),
+      )}
+      <Box $isactive="true">{current}</Box>
+      {Array.from({ length: next }, (_, i) => i + current + 1).map((page) => (
+        <Box
+          key={page}
+          onClick={() => handlePageChange(page)}
+          $isactive="false"
+        >
+          {page}
+        </Box>
+      ))}
+      {next < 4 &&
+        Array.from({ length: 4 - next }).map((_, index) => (
+          <EmptyBox key={index}></EmptyBox>
         ))}
-        {next < 4 &&
-          Array.from({ length: 4 - next }).map((_, index) => (
-            <EmptyBox key={index}></EmptyBox>
-          ))}
       <Arrow $isactive={current === totalPages ? 'false' : 'true'}>
         <span
           onClick={() => {

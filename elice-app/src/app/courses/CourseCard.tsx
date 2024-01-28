@@ -123,7 +123,7 @@ const IconText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   div {
     font-size: 12px;
     color: #7d7e80;

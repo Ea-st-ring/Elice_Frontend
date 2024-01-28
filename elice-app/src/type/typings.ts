@@ -1,11 +1,11 @@
 export default interface OrgCourseListResponses {
-  courseCount: number;
+  courseCount: number
   courses: {
-    id: string;
-    title: string;
-    shortDescription: string;
-    logoFileUrl: null | string;
-    enrollType: number;
-    isFree: boolean;
-  }[];
+    id: string
+    title: string
+    shortDescription: string
+    logoFileUrl: null | string
+    enrollType: number
+    isFree: boolean
+  }[]
 }

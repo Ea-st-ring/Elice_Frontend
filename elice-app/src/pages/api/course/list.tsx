@@ -7,9 +7,10 @@ export default async function List(request: any, response: any) {
       throw new Error('Invalid HTTP method. Expected GET.')
     }
 
-
     if (!request.query.offset || !request.query.countPerPage) {
-      throw new Error('Invalid Parameter, Valid Parameter: offset, countPerPage')
+      throw new Error(
+        'Invalid Parameter, Valid Parameter: offset, countPerPage',
+      )
     }
 
     const query = JSON.parse(request.query.filter_conditions)
@@ -41,18 +42,16 @@ export default async function List(request: any, response: any) {
         console.log(err)
       })
 
-    const course = result?.map(
-      (course) => {
-        return {
-          id: course.id.toString(),
-          title: course.title,
-          enrollType: course.enroll_type,
-          isFree: course.is_free,
-          shortDescription: course.short_description,
-          logoFileUrl: course.logo_file_url,
-        }
-      },
-    )
+    const course = result?.map((course) => {
+      return {
+        id: course.id.toString(),
+        title: course.title,
+        enrollType: course.enroll_type,
+        isFree: course.is_free,
+        shortDescription: course.short_description,
+        logoFileUrl: course.logo_file_url,
+      }
+    })
 
     const data = {
       courseCount: courseCount,
@@ -62,6 +61,6 @@ export default async function List(request: any, response: any) {
     return response.status(200).json(data)
   } catch (error) {
     console.error('Error in List function:', error)
-    return response.status(500).json({ error: (error as string).toString()})
+    return response.status(500).json({ error: (error as string).toString() })
   }
 }
