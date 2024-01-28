@@ -6,6 +6,12 @@ export default async function List(request: any, response: any) {
     if (request.method !== 'GET') {
       throw new Error('Invalid HTTP method. Expected GET.')
     }
+
+
+    if (!request.query.offset || !request.query.countPerPage) {
+      throw new Error('Invalid Parameter, Valid Parameter: offset, countPerPage')
+    }
+
     const query = JSON.parse(request.query.filter_conditions)
 
     if (query.$and[0].title === '') {
