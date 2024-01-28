@@ -22,10 +22,6 @@ const Page = () => {
   const handlePageChange = (page: number) => {
     setOffset((page - 1) * countPerPage)
     setLoading(true)
-
-    if (page < 1 || page > Math.ceil(courseCount / countPerPage)) {
-      return
-    }
   }
 
   const filter_conditions = JSON.stringify({
