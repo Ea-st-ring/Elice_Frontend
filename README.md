@@ -94,5 +94,7 @@ NextJS v14.1.0
 
   급한대로 `config` 설정을 통해 에러를 해결하였으나, CSR이 아닌 SSR 방식을 위해서는 이를 제대로 해결해야할 것 같습니다.
 
-- `webpack-bundle-analyzer` 라이브러리를 통해 Tree-Shaking 혹은 Code-Spliting 기법을 통해 각 번들의 사이즈를 줄여보고 싶었으나 시간 관계상 진행하지 못했습니다.
+- 숫자를 아무렇게나 입력 시에도 검색이 되는 이슈를 발견하였으나, 해결하지 못하였습니다.
+
+- `next/bundle-analyzer` 라이브러리를 통해 Tree-Shaking 혹은 Code-Spliting 기법을 통해 각 번들의 사이즈를 줄여보고 싶었으나 시간 관계상 진행하지 못했습니다.
 
