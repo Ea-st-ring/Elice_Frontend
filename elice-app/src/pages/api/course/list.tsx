@@ -62,6 +62,6 @@ export default async function List(request: any, response: any) {
     return response.status(200).json(data)
   } catch (error) {
     console.error('Error in List function:', error)
-    return response.status(500).json({ error: 'Internal Server Error' })
+    return response.status(500).json({ error: (error as string).toString()})
   }
 }
