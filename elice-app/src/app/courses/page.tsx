@@ -20,8 +20,14 @@ const Page = () => {
   const keyword = params.get('keyword')
   const price = params.getAll('price')
   const handlePageChange = (page: number) => {
+    if (page < 1 || page > Math.ceil(courseCount / countPerPage)) {
+      return
+    }
+
     setOffset((page - 1) * countPerPage)
     setLoading(true)
+
+    
   }
 
   const filter_conditions = JSON.stringify({
