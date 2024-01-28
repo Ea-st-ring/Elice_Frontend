@@ -8,16 +8,16 @@ const CourseCard = (course: OrgCourseListResponses['courses'][0]) => {
     <Wrapper>
       <Content>
         <Label>
-          {course.enrollType === 0
-            ? course.isFree
+          {course.enroll_type === 0
+            ? course.is_free
               ? '무료'
               : '유료'
-            : course.enrollType === 4
+            : course.enroll_type === 4
               ? '구독'
               : '미설정'}
         </Label>
         <Title>{course.title}</Title>
-        <Description>{course.shortDescription}</Description>
+        <Description>{course.short_description}</Description>
         <IconDiv>
           <IconText>
             <div>
@@ -45,7 +45,7 @@ const CourseCard = (course: OrgCourseListResponses['courses'][0]) => {
           </IconText>
           <Logo>
             <Image
-              src={(course.logoFileUrl as string) || '/images/logo.svg'}
+              src={(course.logo_file_url as string) || '/images/logo.svg'}
               alt="logo__img"
               width={52}
               height={52}

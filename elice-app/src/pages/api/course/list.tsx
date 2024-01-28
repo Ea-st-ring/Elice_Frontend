@@ -46,17 +46,17 @@ export default async function List(request: any, response: any) {
       return {
         id: course.id.toString(),
         title: course.title,
-        enrollType: course.enroll_type,
-        isFree: course.is_free,
-        shortDescription: course.short_description,
-        logoFileUrl: course.logo_file_url,
+        enroll_type: course.enroll_type,
+        is_free: course.is_free,
+        short_description: course.short_description,
+        logo_file_url: course.logo_file_url,
       }
     })
 
     const data = {
       courseCount: courseCount,
-      courses: course as OrgCourseListResponses['courses'],
-    } as OrgCourseListResponses
+      courses: course,
+    }
 
     return response.status(200).json(data)
   } catch (error) {

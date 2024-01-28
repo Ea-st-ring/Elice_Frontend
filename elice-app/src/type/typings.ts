@@ -3,9 +3,9 @@ export default interface OrgCourseListResponses {
   courses: {
     id: string
     title: string
-    shortDescription: string
-    logoFileUrl: null | string
-    enrollType: number
-    isFree: boolean
+    short_description: string
+    logo_file_url: null | string
+    enroll_type: number
+    is_free: boolean
   }[]
 }
