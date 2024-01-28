@@ -68,6 +68,8 @@ NextJS v14.1.0
 
 `handlePageChange()`에서는 인자로 넘어온 값에 따라 `offset` 값을 변경하고, `loading` 상태를 true로 설정합니다.
 
+이 때 페이지가 -1 또는 최대 범위를 벗어나지 않도록 조건 검사 로직을 추가했습니다. 
+
 `fetchData()`를 호출하는 `useEffect` 훅의 `deps`에 `offset`이 포함되어 있어 데이터를 새로 요청합니다.
 
 ### 4. Search, Filter
